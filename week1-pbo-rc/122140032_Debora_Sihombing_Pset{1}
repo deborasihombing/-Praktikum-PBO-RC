@@ -1,0 +1,57 @@
+import random
+
+class Robot:
+    def _init_(self, name, attack, hp, attack_accuracy):
+        self.name = name
+        self.attack = attack
+        self.max_hp = hp
+        self.hp = hp
+        self.attack_accuracy = attack_accuracy
+
+    def attack_enemy(self, enemy):
+        if random.random() < self.attack_accuracy:
+            damage = random.randint(1, self.attack)
+            enemy.take_damage(damage)
+            print(f"{self.name} attacks {enemy.name} for {damage} damage!")
+        else:
+            print(f"{self.name} misses the attack on {enemy.name}!")
+
+    def take_damage(self, damage):
+        self.hp -= damage
+        if self.hp < 0:
+            self.hp = 0
+
+    def regen_health(self):
+        self.hp = min(self.max_hp, self.hp + 10)
+
+class Game:
+    def _init_(self, robot1, robot2):
+        self.robot1 = robot1
+        self.robot2 = robot2
+        self.rounds = 0
+
+    def start_game(self):
+        print("Let the battle begin!")
+        while self.robot1.hp > 0 and self.robot2.hp > 0:
+            self.rounds += 1
+            print(f"Round {self.rounds}:")
+            self.robot1.attack_enemy(self.robot2)
+            if self.robot2.hp <= 0:
+                print(f"{self.robot2.name} has been defeated!")
+                break
+            self.robot2.attack_enemy(self.robot1)
+            if self.robot1.hp <= 0:
+                print(f"{self.robot1.name} has been defeated!")
+                break
+            self.robot1.regen_health()
+            self.robot2.regen_health()
+            print(f"{self.robot1.name}'s HP: {self.robot1.hp} | {self.robot2.name}'s HP: {self.robot2.hp}")
+        print("The battle is over!")
+
+# Creating two robots
+robot1 = Robot("Robot 1", 20, 100, 0.8)
+robot2 = Robot("Robot 2", 25, 120, 0.7)
+
+# Starting the game
+game = Game(robot1, robot2)
+game.start_game()
