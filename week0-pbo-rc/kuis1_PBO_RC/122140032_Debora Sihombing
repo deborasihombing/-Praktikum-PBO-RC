@@ -1,0 +1,65 @@
+from abc import ABC, abstractmethod
+
+class Pembayaran(ABC):
+    def __init__(self, nama_pelanggan, nomor_pelanggan, jumlah_tagihan):
+        self.nama_pelanggan = nama_pelanggan
+        self.nomor_pelanggan = nomor_pelanggan
+        self.jumlah_tagihan = jumlah_tagihan
+    
+    @abstractmethod
+    def hitung_biaya(self):
+        pass
+    
+    def informasi_pembayaran(self):
+        print(f"Informasi Pembayaran:")
+        print(f"Nama Pelanggan: {self.nama_pelanggan}")
+        print(f"Nomor Pelanggan: {self.nomor_pelanggan}")
+        print(f"Jumlah Tagihan: {self.jumlah_tagihan}")
+        print(f"Total Biaya Pembayaran: {self.hitung_biaya()}")
+
+class PembayaranInternet(Pembayaran):
+    def __init__(self, nama_pelanggan, nomor_pelanggan, jumlah_tagihan, kecepatan_internet):
+        super().__init__(nama_pelanggan, nomor_pelanggan, jumlah_tagihan)
+        self.kecepatan_internet = kecepatan_internet
+    
+    def hitung_biaya(self):
+        # Contoh aturan biaya berlangganan internet
+        biaya_paket = 50  # Biaya paket dasar
+        biaya_kecepatan = self.kecepatan_internet * 10  # Biaya per Mbps
+        return biaya_paket + biaya_kecepatan
+    
+class PembayaranListrik(Pembayaran):
+    def __init__(self, nama_pelanggan, nomor_pelanggan, jumlah_tagihan, penggunaan_listrik):
+        super().__init__(nama_pelanggan, nomor_pelanggan, jumlah_tagihan)
+        self.penggunaan_listrik = penggunaan_listrik
+    
+    def hitung_biaya(self):
+        # Contoh aturan biaya berlangganan listrik
+        biaya_per_kwh = 0.15  # Biaya per kWh
+        return self.penggunaan_listrik * biaya_per_kwh
+    
+class PembayaranTVKabel(Pembayaran):
+    def __init__(self, nama_pelanggan, nomor_pelanggan, jumlah_tagihan, paket_tv):
+        super().__init__(nama_pelanggan, nomor_pelanggan, jumlah_tagihan)
+        self.paket_tv = paket_tv
+    
+    def hitung_biaya(self):
+        # Contoh aturan biaya berlangganan TV kabel
+        if self.paket_tv == "Basic":
+            return 50
+        elif self.paket_tv == "Premium":
+            return 100
+        else:
+            return 0  # Paket tidak valid, biaya nol
+
+# Contoh penggunaan program
+pembayaran_internet = PembayaranInternet("John Doe", "123456789", 0, 100)  # Kecepatan internet 100 Mbps
+pembayaran_listrik = PembayaranListrik("Jane Smith", "987654321", 200, 1500)  # Penggunaan listrik 1500 kWh
+pembayaran_tv = PembayaranTVKabel("Alice Johnson", "555555555", 0, "Premium")  # Paket TV Premium
+
+# Menampilkan detail pembayaran
+pembayaran_internet.informasi_pembayaran()
+print()
+pembayaran_listrik.informasi_pembayaran()
+print()
+pembayaran_tv.informasi_pembayaran()
